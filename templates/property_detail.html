@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ listing.titel }} – Suriname Real Estate
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+  <div class="property-detail-wrapper">
+
+    <!-- ===============================
+       BREADCRUMB
+       =============================== -->
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ url_for('home') }}">Home</a>
+        </li>
+
+        {% if breadcrumb_district %}
+        <li class="breadcrumb-item">
+          <a href="{{ url_for('home', district=breadcrumb_district.lower()) }}">
+            {{ breadcrumb_district }}
+          </a>
+        </li>
+        {% endif %}
+
+        {% if breadcrumb_wijk %}
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ breadcrumb_wijk }}
+        </li>
+        {% endif %}
+      </ol>
+    </nav>
+
+    <!-- TITEL -->
+    <h1 class="mb-2">{{ listing.titel }}</h1>
+
+    <!-- STATUS BADGE -->
+    <div class="mb-4">
+      {% if listing.status == "te koop" %}
+      <span class="badge bg-success fs-6">Te koop</span>
+      {% elif listing.status == "te huur" %}
+      <span class="badge bg-primary fs-6">Te huur</span>
+      {% elif listing.status == "verkocht" %}
+      <span class="badge bg-secondary fs-6">Verkocht</span>
+      {% elif listing.status == "verhuurd" %}
+      <span class="badge bg-secondary fs-6">Verhuurd</span>
+      {% endif %}
+    </div>
+
+    <!-- ===============================
+       BOVENSTE RIJ (GRID)
+       =============================== -->
+    <div class="row g-4 align-items-start">
+
+      <!-- FOTO / GALERIJ -->
+      <div class="col-lg-6">
+
+        {% if images and primary_image %}
+        <div class="property-gallery mb-4">
+
+          <!-- HOOFDFOTO -->
+          <div class="main-image">
+            <img id="mainPhoto" src="{{ url_for('static', filename=primary_image.image_path) }}"
+              class="img-fluid rounded w-100" style="max-height:420px; object-fit:cover;" alt="{{ listing.titel }}"
+              loading="eager" />
+          </div>
+
+          <!-- THUMBNAILS -->
+          {% if images|length > 1 %}
+          <div class="thumbnail-row mt-2" role="tablist" aria-label="Foto galerij">
+            {% for img in images %}
+            <img src="{{ url_for('static', filename=img.image_path) }}"
+              class="thumbnail {% if img.id == primary_image.id %}active{% endif %}" onclick="changePhoto(this)"
+              role="tab" tabindex="0" onkeypress="if(event.key === 'Enter') changePhoto(this)"
+              alt="Thumbnail {{ loop.index }}" loading="lazy">
+            {% endfor %}
+          </div>
+          {% endif %}
+
+        </div>
+        {% else %}
+        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 420px;">
+          <div class="text-center text-muted">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-image mb-3"
+              viewBox="0 0 16 16">
+              <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+              <path
+                d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
+            </svg>
+            <p>Geen foto's beschikbaar</p>
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+
+      <!-- INFO -->
+      <div class="col-lg-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h4 class="mb-3">Overzicht</h4>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2">
+                <strong>Prijs:</strong>
+                <span class="text-primary fs-5">{{ listing.prijs | currency(listing.valuta) }}</span>
+              </li>
+              <li class="mb-2">
+                <strong>Status:</strong>
+                <span
+                  class="badge {% if listing.status in ['te koop', 'te huur'] %}bg-success{% else %}bg-secondary{% endif %}">
+                  {{ listing.status|capitalize }}
+                </span>
+              </li>
+              <li class="mb-2">
+                <strong>Type:</strong> {{ listing.type_object|capitalize }}
+              </li>
+              {% if listing.grondrecht %}
+              <li class="mb-2">
+                <strong>Grondrecht:</strong> {{ listing.grondrecht|capitalize }}
+              </li>
+              {% endif %}
+              {% if listing.perceel_oppervlakte %}
+              <li class="mb-2">
+                <strong>Perceel oppervlakte:</strong>
+                {{ listing.perceel_oppervlakte }} {{ listing.perceel_eenheid or 'm²' }}
+              </li>
+              {% endif %}
+              {% if listing.woon_oppervlakte %}
+              <li class="mb-2">
+                <strong>Woon oppervlakte:</strong>
+                {{ listing.woon_oppervlakte }} {{ listing.woon_eenheid or 'm²' }}
+              </li>
+              {% endif %}
+              <li class="mb-2">
+                <strong>Locatie:</strong> 📍 {{ listing.district|capitalize }}
+              </li>
+            </ul>
+
+            {% if is_owner %}
+            <hr class="my-3">
+            <div class="d-grid gap-2">
+              <a href="{{ url_for('edit_property', property_id=listing.id) }}" class="btn btn-outline-primary btn-sm">
+                ✏️ Bewerken
+              </a>
+              <form method="POST" action="{{ url_for('delete_property', property_id=listing.id) }}"
+                onsubmit="return confirm('Weet je zeker dat je deze advertentie wilt verwijderen?')">
+                <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                  🗑️ Verwijderen
+                </button>
+              </form>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- CONTACT CARD (voor niet-eigenaren) -->
+        {% if not is_owner %}
+        <div class="card shadow-sm mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Geïnteresseerd?</h5>
+            <p class="card-text small text-muted">
+              Neem contact op met de adverteerder voor meer informatie.
+            </p>
+            <a href="mailto:info@kgshares.sr?subject=Interesse in {{ listing.titel }}" class="btn btn-primary w-100">
+              📧 Contact opnemen
+            </a>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="col-lg-2">
+        <div class="property-ad-fixed">
+          <div class="border rounded p-3 text-center bg-light">
+            <strong class="d-block mb-2">Advertentieruimte</strong>
+            <hr>
+            <p class="text-muted small mb-0">
+              Hier kunnen later advertenties<br>
+              of promoties verschijnen.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===============================
+       BESCHRIJVING
+       =============================== -->
+    {% if listing.beschrijving %}
+    <div class="row mt-5">
+      <div class="col-lg-10">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="mb-3">Beschrijving</h5>
+            <p class="mb-0" style="white-space: pre-line;">{{ listing.beschrijving }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- TERUG KNOP -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+          ← Terug naar overzicht
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+{% endblock %}

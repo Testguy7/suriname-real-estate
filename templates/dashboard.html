@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Mijn advertenties{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+    <h2 class="mb-4">Mijn advertenties</h2>
+
+    {% if properties|length == 0 %}
+    <div class="alert alert-info">
+        Je hebt nog geen advertenties geplaatst.
+        <a href="{{ url_for('add_property') }}">Plaats er nu één</a>.
+    </div>
+    {% else %}
+
+    <div class="row g-4">
+        {% for p in properties %}
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card dashboard-card shadow-sm h-100
+                {% if p.status in ['verkocht','verhuurd'] %}opacity-75{% endif %}">
+
+                <div class="dashboard-card-inner">
+
+                    <!-- ===============================
+                     IMAGE
+                     =============================== -->
+                    <div class="dashboard-image position-relative
+                        {% if p.status in ['verkocht', 'verhuurd'] %}is-sold{% endif %}">
+
+                        {# STATUS BADGE OP FOTO #}
+                        {% if p.status == "te koop" %}
+                        <span class="status-badge bg-success">Te koop</span>
+                        {% elif p.status == "te huur" %}
+                        <span class="status-badge bg-primary">Te huur</span>
+                        {% elif p.status == "verkocht" %}
+                        <span class="status-badge bg-secondary">Verkocht</span>
+                        {% elif p.status == "verhuurd" %}
+                        <span class="status-badge bg-secondary">Verhuurd</span>
+                        {% endif %}
+
+                        {# HOOFDFOTO (TECHNISCH) #}
+                        {% set primary_image = (p.images | selectattr('is_primary') | first) %}
+
+                        {% if primary_image %}
+
+                        {% if p.status == "verkocht" %}
+                        <span class="sold-stamp">VERKOCHT</span>
+                        {% elif p.status == "verhuurd" %}
+                        <span class="sold-stamp">VERHUURD</span>
+                        {% endif %}
+
+                        <img src="{{ url_for('static', filename=primary_image.image_path) }}" alt="{{ p.titel }}"
+                            loading="lazy">
+
+                        {% elif p.images|length > 0 %}
+
+                        {% if p.status == "verkocht" %}
+                        <span class="sold-stamp">VERKOCHT</span>
+                        {% elif p.status == "verhuurd" %}
+                        <span class="sold-stamp">VERHUURD</span>
+                        {% endif %}
+
+                        <img src="{{ url_for('static', filename=p.images[0].image_path) }}" alt="{{ p.titel }}"
+                            loading="lazy">
+
+                        {% else %}
+                        <div class="d-flex h-100 align-items-center justify-content-center text-muted small bg-light">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                                class="bi bi-image" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                <path
+                                    d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
+                            </svg>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- ===============================
+                     BODY
+                     =============================== -->
+                    <div class="card-body dashboard-body">
+
+                        <!-- TOP ROW: MENU -->
+                        <div class="d-flex justify-content-end mb-2">
+
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-light border dropdown-toggle" type="button"
+                                    id="dropdownMenu{{ p.id }}" data-bs-toggle="dropdown" aria-expanded="false"
+                                    aria-label="Acties voor {{ p.titel }}">
+                                    ⋮
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu{{ p.id }}">
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="{{ url_for('property_detail', property_id=p.id) }}">
+                                            👁️ Bekijken
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="{{ url_for('edit_property', property_id=p.id) }}">
+                                            ✏️ Bewerken
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+
+                                    <li>
+                                        <form method="POST" action="{{ url_for('toggle_status', property_id=p.id) }}"
+                                            class="d-inline">
+                                            <button type="submit" class="dropdown-item text-success">
+                                                {% if p.status == "te koop" %}
+                                                ✓ Markeer als verkocht
+                                                {% elif p.status == "verkocht" %}
+                                                ↩️ Zet terug naar te koop
+                                                {% elif p.status == "te huur" %}
+                                                ✓ Markeer als verhuurd
+                                                {% elif p.status == "verhuurd" %}
+                                                ↩️ Zet terug naar te huur
+                                                {% endif %}
+                                            </button>
+                                        </form>
+                                    </li>
+
+                                    <li>
+                                        <form method="POST" action="{{ url_for('delete_property', property_id=p.id) }}"
+                                            onsubmit="return confirm('Weet je zeker dat je deze advertentie wilt verwijderen?')"
+                                            class="d-inline">
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                🗑️ Verwijderen
+                                            </button>
+                                        </form>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- TITEL -->
+                        <h5 class="card-title mb-2">{{ p.titel }}</h5>
+
+                        <!-- TYPE -->
+                        <p class="card-text text-muted small mb-1">
+                            <span class="badge bg-light text-dark border">{{ p.type_object|capitalize }}</span>
+                        </p>
+
+                        <!-- LOCATIE -->
+                        <p class="card-text text-muted small mb-2">
+                            📍 {{ p.district|capitalize }}
+                        </p>
+
+                        <!-- PRIJS -->
+                        <div class="fw-semibold text-primary">
+                            <strong>{{ p.prijs | currency(p.valuta) }}</strong>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

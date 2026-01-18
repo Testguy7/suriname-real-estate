@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Registreren – Suriname Real Estate{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+
+        <div class="card shadow-sm mt-5">
+            <div class="card-body p-4">
+
+                <h2 class="card-title text-center mb-4">Account aanmaken</h2>
+
+                <form method="POST" action="{{ url_for('register') }}">
+
+                    <div class="mb-3">
+                        <label for="naam" class="form-label">Naam</label>
+                        <input type="text" class="form-control" id="naam" name="naam" placeholder="Voor- en achternaam"
+                            autocomplete="name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="jouw@email.com"
+                            autocomplete="email" required>
+                        <div class="form-text">
+                            We delen je e-mailadres niet met derden.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Wachtwoord</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Minimaal 6 karakters" autocomplete="new-password" minlength="6" required>
+                        <div class="form-text">
+                            Gebruik minimaal 6 karakters.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password_confirm" class="form-label">Bevestig wachtwoord</label>
+                        <input type="password" class="form-control" id="password_confirm" name="password_confirm"
+                            placeholder="Herhaal wachtwoord" autocomplete="new-password" minlength="6" required>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            Ik ga akkoord met de <a href="#" target="_blank">voorwaarden</a>
+                        </label>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">
+                            Registreren
+                        </button>
+                    </div>
+
+                </form>
+
+                <hr class="my-4">
+
+                <p class="text-center text-muted mb-0">
+                    Heb je al een account?
+                    <a href="{{ url_for('login') }}" class="text-decoration-none">
+                        Log hier in
+                    </a>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Password confirmation validation
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        const password = document.getElementById('password');
+        const passwordConfirm = document.getElementById('password_confirm');
+
+        form.addEventListener('submit', function (e) {
+            if (password.value !== passwordConfirm.value) {
+                e.preventDefault();
+
+                passwordConfirm.classList.add('is-invalid');
+
+                // Add or update error message
+                let feedback = passwordConfirm.nextElementSibling;
+                if (!feedback || !feedback.classList.contains('invalid-feedback')) {
+                    feedback = document.createElement('div');
+                    feedback.className = 'invalid-feedback';
+                    passwordConfirm.parentNode.appendChild(feedback);
+                }
+                feedback.textContent = 'Wachtwoorden komen niet overeen';
+                feedback.style.display = 'block';
+
+                passwordConfirm.focus();
+                return false;
+            }
+        });
+
+        // Remove error on input
+        passwordConfirm.addEventListener('input', function () {
+            this.classList.remove('is-invalid');
+            const feedback = this.nextElementSibling;
+            if (feedback && feedback.classList.contains('invalid-feedback')) {
+                feedback.style.display = 'none';
+            }
+        });
+
+        // Password strength indicator (optional)
+        password.addEventListener('input', function () {
+            const value = this.value;
+            const strength = document.getElementById('passwordStrength');
+
+            if (!strength && value.length > 0) {
+                const strengthDiv = document.createElement('div');
+                strengthDiv.id = 'passwordStrength';
+                strengthDiv.className = 'form-text mt-1';
+                this.parentNode.appendChild(strengthDiv);
+            }
+
+            if (value.length === 0) {
+                if (strength) strength.remove();
+                return;
+            }
+
+            const strengthEl = document.getElementById('passwordStrength');
+            if (!strengthEl) return;
+
+            let strengthText = '';
+            let strengthClass = '';
+
+            if (value.length < 6) {
+                strengthText = 'Te kort';
+                strengthClass = 'text-danger';
+            } else if (value.length < 8) {
+                strengthText = 'Matig';
+                strengthClass = 'text-warning';
+            } else if (value.length < 12) {
+                strengthText = 'Goed';
+                strengthClass = 'text-success';
+            } else {
+                strengthText = 'Uitstekend';
+                strengthClass = 'text-success fw-bold';
+            }
+
+            strengthEl.textContent = `Sterkte: ${strengthText}`;
+            strengthEl.className = `form-text mt-1 ${strengthClass}`;
+        });
+    });
+</script>
+{% endblock %}

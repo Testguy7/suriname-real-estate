@@ -1,0 +1,443 @@
+/* ===============================
+   FORM CONTAINER
+   =============================== */
+/* Formulieren links uitgelijnd (add/edit) */
+.form-wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Gecentreerde formulieren (login / register) */
+.form-wrapper-center {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ===============================
+   FORM LABELS
+   =============================== */
+.form-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+  color: #212529;
+}
+
+.form-label.required::after {
+  content: " *";
+  color: #dc3545;
+}
+
+/* ===============================
+   INPUTS & SELECTS
+   =============================== */
+.form-control,
+.form-select {
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+  outline: 0;
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.form-control::placeholder {
+  color: #6c757d;
+  opacity: 0.7;
+}
+
+/* Invalid state */
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: #dc3545;
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Valid state */
+.form-control.is-valid,
+.form-select.is-valid {
+  border-color: #198754;
+}
+
+.form-control.is-valid:focus,
+.form-select.is-valid:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+/* ===============================
+   TEXTAREA
+   =============================== */
+textarea.form-control {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+/* ===============================
+   FORM GROUP SPACING
+   =============================== */
+.form-group,
+.mb-3 {
+  margin-bottom: 1.25rem;
+}
+
+/* ===============================
+   FILE INPUT
+   =============================== */
+input[type="file"] {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  padding: 0.375rem 0.75rem;
+  margin-right: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #e9ecef;
+}
+
+input[type="file"]::file-selector-button {
+  padding: 0.375rem 0.75rem;
+  margin-right: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #e9ecef;
+}
+
+/* ===============================
+   FORM ACTIONS
+   =============================== */
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.form-actions .btn {
+  min-width: 120px;
+}
+
+@media (max-width: 576px) {
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* ===============================
+   AUTH FORMS (LOGIN / REGISTER)
+   =============================== */
+.auth-card {
+  max-width: 420px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.auth-card .card-body {
+  padding: 2rem;
+}
+
+.auth-card .card-title {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+/* ===============================
+   HELPER TEXT
+   =============================== */
+.form-text {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.invalid-feedback {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #dc3545;
+}
+
+.valid-feedback {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #198754;
+}
+
+/* ===============================
+   CHECKBOX & RADIO
+   =============================== */
+.form-check {
+  padding-left: 1.5rem;
+}
+
+.form-check-input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.125rem;
+  cursor: pointer;
+}
+
+.form-check-input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-check-label {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ===============================
+   INPUT GROUPS
+   =============================== */
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.input-group > .form-control {
+  position: relative;
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 0.5rem;
+}
+
+/* ===============================
+   NUMBER INPUT SPINNERS
+   =============================== */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+/* Show spinners on hover/focus */
+input[type="number"]:hover::-webkit-outer-spin-button,
+input[type="number"]:hover::-webkit-inner-spin-button,
+input[type="number"]:focus::-webkit-outer-spin-button,
+input[type="number"]:focus::-webkit-inner-spin-button {
+  -webkit-appearance: auto;
+  appearance: auto;
+}
+
+/* ===============================
+   PHOTO PREVIEW GRID
+   =============================== */
+#photoPreview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+#photoPreview img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 2px solid #dee2e6;
+}
+
+/* ===============================
+   FORM VALIDATION STATES
+   =============================== */
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+  border-color: #dc3545;
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+  border-color: #198754;
+}
+
+/* ===============================
+   RESPONSIVE ADJUSTMENTS
+   =============================== */
+@media (max-width: 768px) {
+  .form-wrapper {
+    max-width: 100%;
+  }
+
+  .form-wrapper-center {
+    max-width: 100%;
+  }
+
+  .form-label {
+    font-size: 0.95rem;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* ===============================
+   FLOATING LABELS (Optional)
+   =============================== */
+.form-floating {
+  position: relative;
+}
+
+.form-floating > .form-control,
+.form-floating > .form-select {
+  height: calc(3.5rem + 2px);
+  padding: 1rem 0.75rem;
+}
+
+.form-floating > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  padding: 1rem 0.75rem;
+  pointer-events: none;
+  border: 1px solid transparent;
+  transform-origin: 0 0;
+  transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+  opacity: 0.65;
+  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+/* ===============================
+   CUSTOM STYLES FOR SPECIFIC FORMS
+   =============================== */
+
+/* District and Wijk selects */
+#districtSelect,
+#wijkSelect {
+  text-transform: capitalize;
+}
+
+/* Search input with icon placeholder */
+input[name="q"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px;
+  padding-right: 2.5rem;
+}
+
+/* ===============================
+   LOADING STATE FOR FORMS
+   =============================== */
+form.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+form.loading button[type="submit"] {
+  position: relative;
+  color: transparent;
+}
+
+form.loading button[type="submit"]::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY ENHANCEMENTS
+   =============================== */
+
+/* Focus visible only for keyboard navigation */
+.form-control:focus-visible,
+.form-select:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+/* Hide outline for mouse clicks */
+.form-control:focus:not(:focus-visible),
+.form-select:focus:not(:focus-visible),
+.btn:focus:not(:focus-visible) {
+  outline: 0;
+}

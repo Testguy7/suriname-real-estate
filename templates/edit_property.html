@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}
+Advertentie bewerken – Suriname Real Estate
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Advertentie bewerken</h2>
+
+<div class="form-wrapper">
+
+    <!-- ===============================
+       HOOFDFORMULIER
+       =============================== -->
+    <form method="POST" enctype="multipart/form-data" data-no-lock="true">
+
+        <div class="mb-3">
+            <label class="form-label">Titel</label>
+            <input type="text" class="form-control" name="titel" value="{{ property.titel }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Type object</label>
+            <select class="form-select" name="type_object" required>
+                <option value="huis" {% if property.type_object=="huis" %}selected{% endif %}>Huis</option>
+                <option value="perceel" {% if property.type_object=="perceel" %}selected{% endif %}>Perceel</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status" required>
+                <option value="te koop" {% if property.status=="te koop" %}selected{% endif %}>Te koop</option>
+                <option value="te huur" {% if property.status=="te huur" %}selected{% endif %}>Te huur</option>
+                <option value="verkocht" {% if property.status=="verkocht" %}selected{% endif %}>Verkocht</option>
+                <option value="verhuurd" {% if property.status=="verhuurd" %}selected{% endif %}>Verhuurd</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <label class="form-label">Prijs</label>
+                <input type="number" step="0.01" min="0" class="form-control" name="prijs" value="{{ property.prijs }}"
+                    required>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Valuta</label>
+                <select class="form-select" name="valuta" required>
+                    <option value="SRD" {% if property.valuta=="SRD" %}selected{% endif %}>SRD (Surinaamse Dollar)
+                    </option>
+                    <option value="USD" {% if property.valuta=="USD" %}selected{% endif %}>USD (US Dollar)</option>
+                    <option value="EUR" {% if property.valuta=="EUR" %}selected{% endif %}>EUR (Euro)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Grondrecht</label>
+            <select class="form-select" name="grondrecht">
+                <option value="">Selecteer grondrecht (optioneel)</option>
+                <option value="eigendom" {% if property.grondrecht=="eigendom" %}selected{% endif %}>Eigendom</option>
+                <option value="erfpacht" {% if property.grondrecht=="erfpacht" %}selected{% endif %}>Erfpacht</option>
+                <option value="grondhuur" {% if property.grondrecht=="grondhuur" %}selected{% endif %}>Grondhuur
+                </option>
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5 mb-3">
+                <label class="form-label">Perceel oppervlakte</label>
+                <input type="number" step="0.01" min="0" class="form-control" name="perceel_oppervlakte"
+                    value="{{ property.perceel_oppervlakte or '' }}">
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <label class="form-label">Eenheid</label>
+                <select class="form-select" name="perceel_eenheid">
+                    <option value="">-</option>
+                    <option value="m2" {% if property.perceel_eenheid=="m2" or not property.perceel_eenheid %}selected{%
+                        endif %}>m²</option>
+                    <option value="hectare" {% if property.perceel_eenheid=="hectare" %}selected{% endif %}>Hectare
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-4 mb-3"></div>
+
+            <div class="col-md-5 mb-3">
+                <label class="form-label">Woon oppervlakte</label>
+                <input type="number" step="0.01" min="0" class="form-control" name="woon_oppervlakte"
+                    value="{{ property.woon_oppervlakte or '' }}">
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <label class="form-label">Eenheid</label>
+                <select class="form-select" name="woon_eenheid">
+                    <option value="">-</option>
+                    <option value="m2" {% if property.woon_eenheid=="m2" or not property.woon_eenheid %}selected{% endif
+                        %}>m²</option>
+                    <option value="hectare" {% if property.woon_eenheid=="hectare" %}selected{% endif %}>Hectare
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Beschrijving</label>
+            <textarea class="form-control" name="beschrijving" rows="4">{{ property.beschrijving }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nieuwe foto's toevoegen</label>
+            <input type="file" class="form-control" name="fotos" multiple accept="image/*">
+            <div class="form-text">
+                Je kunt meerdere foto's tegelijk uploaden. Maximaal {{ 10 - property.images|length }} foto's.
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button class="btn btn-success" type="submit">Opslaan</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Annuleren</a>
+        </div>
+    </form>
+
+    <!-- ===============================
+       FOTO-BEHEER (CSS GRID + DRAG)
+       =============================== -->
+    {% if property.images %}
+    <hr class="my-5">
+    <h5 class="mb-3">Bestaande foto's</h5>
+    <p class="text-muted small mb-3">
+        Sleep foto's om de volgorde te wijzigen. De eerste foto wordt gebruikt als hoofdfoto op de homepage.
+    </p>
+
+    <!-- CSS GRID CONTAINER -->
+    <div id="photoGrid" class="edit-photo-grid">
+
+        {% for img in property.images %}
+        <div class="edit-image-card" draggable="true" data-image-id="{{ img.id }}" role="img"
+            aria-label="Foto {{ loop.index }} van {{ property.titel }}">
+
+            <img src="{{ url_for('static', filename=img.image_path) }}" alt="Foto {{ loop.index }}" loading="lazy">
+
+            {% if img.is_primary %}
+            <span class="badge bg-success position-absolute top-0 start-0 m-2" style="z-index: 10;">Hoofdfoto</span>
+            {% endif %}
+
+            <button type="button" class="delete-image-btn" data-image-id="{{ img.id }}" title="Verwijder deze foto"
+                aria-label="Verwijder foto {{ loop.index }}">
+                ✕
+            </button>
+
+            <button type="button" class="btn btn-sm btn-outline-primary make-primary-btn" data-id="{{ img.id }}" {% if
+                img.is_primary %}disabled{% endif %}>
+                {% if img.is_primary %}
+                Al hoofdfoto
+                {% else %}
+                Maak hoofdfoto
+                {% endif %}
+            </button>
+
+        </div>
+        {% endfor %}
+
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Prevent multiple form submissions
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const btn = this.querySelector('button[type="submit"]');
+        if (btn.disabled) {
+            e.preventDefault();
+            return false;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Opslaan...';
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,494 @@
+/* ===============================
+   GLOBAL RESET & BODY
+   =============================== */
+body {
+  background-color: #f8f9fa;
+  color: #212529;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ===============================
+   BOOTSTRAP CONTAINERS
+   =============================== */
+.container,
+.container-lg,
+.container-xl {
+  max-width: 1320px;
+}
+
+/* ===============================
+   NAVBAR
+   =============================== */
+.navbar-brand {
+  letter-spacing: 0.3px;
+  font-size: 1.25rem;
+}
+
+.navbar-nav .nav-link {
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  opacity: 0.85;
+}
+
+.navbar .nav-link.text-warning {
+  font-weight: 600;
+}
+
+.navbar .nav-link.text-warning:hover {
+  color: #ffc720 !important;
+}
+
+/* ===============================
+   BUTTONS
+   =============================== */
+.btn {
+  border-radius: 0.45rem;
+  transition: all 0.2s ease;
+}
+
+.btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-danger:hover,
+.btn-outline-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* ===============================
+   FLASH MESSAGES
+   =============================== */
+.alert {
+  border-radius: 0.5rem;
+  border-left-width: 4px;
+}
+
+.alert-success {
+  border-left-color: #198754;
+}
+
+.alert-danger {
+  border-left-color: #dc3545;
+}
+
+.alert-warning {
+  border-left-color: #ffc107;
+}
+
+.alert-info {
+  border-left-color: #0dcaf0;
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+footer {
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+/* ===============================
+   TYPOGRAPHY
+   =============================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+a {
+  transition: color 0.2s ease;
+}
+
+/* ===============================
+   CARDS
+   =============================== */
+.card {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.card:hover {
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+/* =================================================
+   DASHBOARD – MIJN ADVERTENTIES
+   ================================================= */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
+/* ===============================
+   DASHBOARD CARD
+   =============================== */
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 0.75rem;
+  position: relative;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.dashboard-card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ===============================
+   DASHBOARD IMAGE
+   =============================== */
+.dashboard-image {
+  height: 180px;
+  background-color: #f1f3f5;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.dashboard-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===============================
+   VERKOCHT / VERHUURD EFFECT
+   =============================== */
+.dashboard-image.is-sold img {
+  filter: grayscale(100%) brightness(0.9);
+}
+
+.dashboard-image.is-sold::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+/* ===============================
+   SOLD STAMP
+   =============================== */
+.sold-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-20deg);
+  padding: 10px 22px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #dc3545;
+  border: 3px solid #dc3545;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 3;
+  pointer-events: none;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ===============================
+   STATUS BADGE
+   =============================== */
+.status-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  color: #fff;
+  z-index: 2;
+}
+
+/* ===============================
+   DASHBOARD BODY
+   =============================== */
+.dashboard-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =================================================
+   EDIT PAGINA – FOTO BEHEER (CSS GRID)
+   ================================================= */
+
+/* CSS GRID CONTAINER - NO BOOTSTRAP GRID */
+.edit-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .edit-photo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+}
+
+/* Foto kaart */
+.edit-image-card {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid #dee2e6;
+  cursor: grab;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.edit-image-card:active {
+  cursor: grabbing;
+}
+
+.edit-image-card.dragging {
+  opacity: 0.6;
+  transform: scale(0.95);
+}
+
+/* Afbeelding */
+.edit-image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Hover */
+.edit-image-card:hover {
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
+  transform: translateY(-2px);
+}
+
+/* Hoofdfoto badge */
+.edit-image-card .badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+}
+
+/* ===============================
+   MODERNE DELETE KNOP
+   =============================== */
+.edit-image-card .delete-image-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.edit-image-card:hover .delete-image-btn,
+.edit-image-card .delete-image-btn:focus {
+  opacity: 1;
+}
+
+.edit-image-card .delete-image-btn:hover {
+  background: #dc3545;
+  transform: scale(1.1);
+}
+
+.edit-image-card .delete-image-btn:focus {
+  outline: 2px solid #dc3545;
+  outline-offset: 2px;
+}
+
+/* ===============================
+   MAAK HOOFDFOTO KNOP
+   =============================== */
+.edit-image-card .make-primary-btn {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  font-size: 0.85rem;
+}
+
+.edit-image-card:hover .make-primary-btn,
+.edit-image-card .make-primary-btn:focus {
+  opacity: 1;
+}
+
+.edit-image-card .make-primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   RESPONSIVE UTILITIES
+   =============================== */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.35rem;
+  }
+
+  .dashboard-container {
+    margin: 1.5rem auto;
+  }
+
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+}
+
+/* ===============================
+   LOADING STATE
+   =============================== */
+.btn.loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===============================
+   FORM FOCUS STATES
+   =============================== */
+.form-control:focus,
+.form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+/* ===============================
+   ACCESSIBILITY
+   =============================== */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ===============================
+   SMOOTH SCROLLING
+   =============================== */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

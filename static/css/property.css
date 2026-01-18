@@ -1,0 +1,319 @@
+/* ===============================
+   PROPERTY DETAIL – LAYOUT CORE
+   =============================== */
+
+.property-detail-wrapper {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+/* ===============================
+   PROPERTY FOTO GALERIJ (DETAIL)
+   =============================== */
+
+.property-gallery {
+  margin-bottom: 1.5rem;
+}
+
+.main-image img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 0.6rem;
+  display: block;
+}
+
+.thumbnail-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+/* Custom scrollbar for thumbnail row */
+.thumbnail-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.thumbnail-row::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.thumbnail-row::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.thumbnail-row::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.thumbnail {
+  width: 90px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  opacity: 0.7;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.thumbnail.active,
+.thumbnail:hover {
+  opacity: 1;
+  border-color: #0d6efd;
+  transform: scale(1.05);
+}
+
+.thumbnail:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+/* ===============================
+   INFO CARD
+   =============================== */
+
+.card {
+  border-radius: 0.6rem;
+  transition: box-shadow 0.2s ease;
+}
+
+/* ===============================
+   ADVERTENTIE SIDEBAR
+   =============================== */
+
+.property-ad-fixed {
+  height: 100%;
+}
+
+@media (min-width: 992px) {
+  .property-ad-fixed {
+    position: sticky;
+    top: 110px;
+  }
+}
+
+/* ===============================
+   BESCHRIJVING
+   =============================== */
+
+.property-description {
+  line-height: 1.7;
+  font-size: 1rem;
+  color: #212529;
+}
+
+/* ===============================
+   MOBIEL – DETAIL
+   =============================== */
+
+@media (max-width: 768px) {
+  .main-image img {
+    height: 260px;
+  }
+
+  .thumbnail {
+    width: 70px;
+    height: 50px;
+  }
+}
+
+/* =================================================
+   INDEX/HOME – PROPERTY CARDS
+   ================================================= */
+
+.property-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.property-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* =================================================
+   EDIT PAGINA – FOTO GRID (DRAG & DROP)
+   ================================================= */
+
+.edit-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 1rem;
+}
+
+/* Responsive grid for smaller screens */
+@media (max-width: 768px) {
+  .edit-photo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+}
+
+/* Foto kaart (alleen edit-pagina) */
+.edit-image-card {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid #dee2e6;
+  cursor: grab;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.edit-image-card:active {
+  cursor: grabbing;
+}
+
+.edit-image-card.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+/* Afbeelding */
+.edit-image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Hover effect */
+.edit-image-card:hover {
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   HOOFDFOTO BADGE (EDIT)
+   =============================== */
+
+.edit-image-card .badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ===============================
+   MODERNE DELETE KNOP (EDIT)
+   =============================== */
+
+.edit-image-card .delete-image-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+  z-index: 10;
+  cursor: pointer;
+}
+
+/* Alleen zichtbaar bij hover */
+.edit-image-card:hover .delete-image-btn {
+  opacity: 1;
+}
+
+/* Hover accent */
+.edit-image-card .delete-image-btn:hover {
+  background: #dc3545;
+  transform: scale(1.1);
+}
+
+.edit-image-card .delete-image-btn:focus {
+  opacity: 1;
+  outline: 2px solid #dc3545;
+  outline-offset: 2px;
+}
+
+/* ===============================
+   MAKE PRIMARY BUTTON (EDIT)
+   =============================== */
+
+.edit-image-card .make-primary-btn {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  font-size: 0.85rem;
+}
+
+.edit-image-card:hover .make-primary-btn {
+  opacity: 1;
+}
+
+.edit-image-card .make-primary-btn:focus {
+  opacity: 1;
+}
+
+.edit-image-card .make-primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   DRAG DROP VISUAL FEEDBACK
+   =============================== */
+
+.edit-image-card.drag-over {
+  border: 2px dashed #0d6efd;
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.property-card {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+
+@media print {
+  .edit-image-card .delete-image-btn,
+  .edit-image-card .make-primary-btn {
+    display: none;
+  }
+
+  .property-card {
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+}

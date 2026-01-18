@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block title %}Home – Suriname Real Estate{% endblock %}
+
+{% block content %}
+
+<!-- ===============================
+     HEADER
+     =============================== -->
+<div class="mb-4">
+    <h1 class="mb-2">Huizen en percelen in Suriname</h1>
+    <p class="lead">Vind of plaats vastgoed te koop of te huur.</p>
+</div>
+
+<!-- ===============================
+     FILTER FORM
+     =============================== -->
+<form method="GET" class="card shadow-sm p-4 mb-4" role="search" aria-label="Filter vastgoed">
+
+    <div class="row g-3 align-items-end">
+
+        <!-- SEARCH -->
+        <div class="col-md-6 col-lg-4">
+            <label for="searchInput" class="form-label">Zoeken</label>
+            <input type="text" id="searchInput" name="q" class="form-control"
+                placeholder="Zoek op titel of beschrijving..." value="{{ q or '' }}">
+        </div>
+
+        <!-- DISTRICT -->
+        <div class="col-md-6 col-lg-2">
+            <label for="districtSelect" class="form-label">District</label>
+            <select name="district" id="districtSelect" class="form-select">
+                <option value="">Alle districten</option>
+                {% for d in [
+                "paramaribo","wanica","nickerie","commewijne",
+                "coronie","para","saramacca","marowijne",
+                "brokopondo","sipaliwini"
+                ] %}
+                <option value="{{ d }}" {% if district==d %}selected{% endif %}>
+                    {{ d.capitalize() }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- WIJK -->
+        <div class="col-md-6 col-lg-2">
+            <label for="wijkSelect" class="form-label">Wijk</label>
+            <select name="wijk" id="wijkSelect" class="form-select" {% if not district %}disabled{% endif %}>
+                <option value="">Alle wijken</option>
+                {% if district and wijken %}
+                {% for wijk in wijken %}
+                <option value="{{ wijk }}" {% if request.args.get('wijk')==wijk %}selected{% endif %}>
+                    {{ wijk }}
+                </option>
+                {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+
+        <!-- STATUS -->
+        <div class="col-md-6 col-lg-2">
+            <label for="statusSelect" class="form-label">Status</label>
+            <select name="status" id="statusSelect" class="form-select">
+                <option value="">Alles</option>
+                <option value="te koop" {% if status=="te koop" %}selected{% endif %}>Te koop</option>
+                <option value="te huur" {% if status=="te huur" %}selected{% endif %}>Te huur</option>
+            </select>
+        </div>
+
+        <!-- TYPE -->
+        <div class="col-md-6 col-lg-2">
+            <label for="typeSelect" class="form-label">Type</label>
+            <select name="type_object" id="typeSelect" class="form-select">
+                <option value="">Alle types</option>
+                <option value="huis" {% if type_object=="huis" %}selected{% endif %}>Huis</option>
+                <option value="perceel" {% if type_object=="perceel" %}selected{% endif %}>Perceel</option>
+            </select>
+        </div>
+
+    </div>
+
+    <!-- PRICE RANGE ROW -->
+    <div class="row g-3 mt-2 align-items-end">
+
+        <!-- VALUTA -->
+        <div class="col-md-6 col-lg-2">
+            <label for="valutaSelect" class="form-label">Valuta</label>
+            <select name="valuta" id="valutaSelect" class="form-select">
+                <option value="">Alle</option>
+                <option value="SRD" {% if valuta=="SRD" %}selected{% endif %}>SRD</option>
+                <option value="USD" {% if valuta=="USD" %}selected{% endif %}>USD</option>
+                <option value="EUR" {% if valuta=="EUR" %}selected{% endif %}>EUR</option>
+            </select>
+        </div>
+
+        <div class="col-md-3 col-lg-2">
+            <label for="minPrice" class="form-label">Min. prijs</label>
+            <input type="number" id="minPrice" name="min_prijs" class="form-control" placeholder="0" min="0" step="1000"
+                value="{{ min_prijs if min_prijs is not none else '' }}">
+        </div>
+
+        <div class="col-md-3 col-lg-2">
+            <label for="maxPrice" class="form-label">Max. prijs</label>
+            <input type="number" id="maxPrice" name="max_prijs" class="form-control" placeholder="Onbeperkt" min="0"
+                step="1000" value="{{ max_prijs if max_prijs is not none else '' }}">
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+            <div class="d-flex gap-2 justify-content-md-end">
+                <button type="submit" class="btn btn-primary px-4">
+                    🔍 Zoeken
+                </button>
+                <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                    ✕ Reset
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+<!-- ===============================
+     RESULTS COUNT
+     =============================== -->
+{% if properties|length > 0 %}
+<div class="mb-3">
+    <p class="text-muted">
+        <strong>{{ properties|length }}</strong>
+        {% if properties|length == 1 %}
+        advertentie gevonden
+        {% else %}
+        advertenties gevonden
+        {% endif %}
+    </p>
+</div>
+{% endif %}
+
+<!-- ===============================
+     NO RESULTS
+     =============================== -->
+{% if properties|length == 0 %}
+<div class="alert alert-info">
+    <h5 class="alert-heading">Geen advertenties gevonden</h5>
+    <p class="mb-0">
+        Probeer je zoekopdracht aan te passen of
+        <a href="{{ url_for('home') }}" class="alert-link">verwijder alle filters</a>.
+    </p>
+</div>
+{% endif %}
+
+<!-- ===============================
+     PROPERTY GRID (4 PER RIJ)
+     =============================== -->
+{% if properties|length > 0 %}
+<div class="row g-4">
+    {% for p in properties %}
+    <div class="col-sm-6 col-md-4 col-lg-3">
+
+        <a href="{{ url_for('property_detail', property_id=p.id) }}" class="text-decoration-none text-dark">
+
+            <article class="card h-100 shadow-sm property-card
+                {% if p.status in ['verhuurd','verkocht'] %}opacity-75{% endif %}" aria-label="{{ p.titel }}">
+
+                <!-- IMAGE CONTAINER -->
+                <div class="position-relative" style="height: 200px; overflow: hidden;">
+
+                    <!-- STATUS BADGE -->
+                    {% if p.status == "te koop" %}
+                    <span class="badge bg-success position-absolute top-0 start-0 m-2" style="z-index: 2;">Te
+                        koop</span>
+                    {% elif p.status == "te huur" %}
+                    <span class="badge bg-primary position-absolute top-0 start-0 m-2" style="z-index: 2;">Te
+                        huur</span>
+                    {% elif p.status == "verkocht" %}
+                    <span class="badge bg-secondary position-absolute top-0 start-0 m-2"
+                        style="z-index: 2;">Verkocht</span>
+                    {% elif p.status == "verhuurd" %}
+                    <span class="badge bg-secondary position-absolute top-0 start-0 m-2"
+                        style="z-index: 2;">Verhuurd</span>
+                    {% endif %}
+
+                    <!-- IMAGE -->
+                    {% set primary_image = (p.images | selectattr('is_primary') | first) %}
+
+                    {% if primary_image %}
+                    <img src="{{ url_for('static', filename=primary_image.image_path) }}"
+                        class="card-img-top h-100 w-100" style="object-fit: cover;" alt="{{ p.titel }}" loading="lazy">
+                    {% elif p.images|length > 0 %}
+                    <img src="{{ url_for('static', filename=p.images[0].image_path) }}" class="card-img-top h-100 w-100"
+                        style="object-fit: cover;" alt="{{ p.titel }}" loading="lazy">
+                    {% else %}
+                    <div class="bg-light h-100 d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                            class="bi bi-image text-muted" viewBox="0 0 16 16">
+                            <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                            <path
+                                d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z" />
+                        </svg>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body">
+                    <h2 class="h6 card-title mb-2 fw-semibold">{{ p.titel }}</h2>
+
+                    <div class="mb-2">
+                        <span class="badge bg-light text-dark border">{{ p.type_object|capitalize }}</span>
+                    </div>
+
+                    <p class="card-text text-muted small mb-2">
+                        📍 {{ p.district|capitalize }}
+                    </p>
+
+                    <p class="mb-0 text-primary fw-bold">
+                        {{ p.prijs | currency(p.valuta) }}
+                    </p>
+                </div>
+
+            </article>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- ===============================
+     PAGINATION (if needed)
+     =============================== -->
+{% if pagination and pagination.pages > 1 %}
+<nav aria-label="Pagina navigatie" class="mt-5">
+    <ul class="pagination justify-content-center">
+
+        {% if pagination.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('home', page=pagination.prev_num, **request.args) }}">
+                Vorige
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Vorige</span>
+        </li>
+        {% endif %}
+
+        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+        {% if page_num == pagination.page %}
+        <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ page_num }}</span>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('home', page=page_num, **request.args) }}">
+                {{ page_num }}
+            </a>
+        </li>
+        {% endif %}
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">...</span>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if pagination.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('home', page=pagination.next_num, **request.args) }}">
+                Volgende
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Volgende</span>
+        </li>
+        {% endif %}
+
+    </ul>
+</nav>
+{% endif %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/location.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}
+Vastgoed toevoegen – Suriname Real Estate
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Vastgoed toevoegen</h2>
+
+<div class="form-wrapper">
+  <form method="POST" enctype="multipart/form-data" data-no-lock="true">
+
+    <!-- TITEL -->
+    <div class="mb-3">
+      <label class="form-label">Titel</label>
+      <input type="text" class="form-control" name="titel" required />
+    </div>
+
+    <!-- TYPE -->
+    <div class="mb-3">
+      <label class="form-label">Type object</label>
+      <select class="form-select" name="type_object" required>
+        <option value="">Selecteer type</option>
+        <option value="huis">Huis</option>
+        <option value="perceel">Perceel</option>
+      </select>
+    </div>
+
+    <!-- STATUS -->
+    <div class="mb-3">
+      <label class="form-label">Status</label>
+      <select class="form-select" name="status" required>
+        <option value="">Te koop of te huur</option>
+        <option value="te koop">Te koop</option>
+        <option value="te huur">Te huur</option>
+      </select>
+    </div>
+
+    <!-- PRIJS -->
+    <div class="row">
+      <div class="col-md-8 mb-3">
+        <label class="form-label">Prijs</label>
+        <input type="number" step="0.01" min="0" class="form-control" name="prijs" required />
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Valuta</label>
+        <select class="form-select" name="valuta" required>
+          <option value="SRD" selected>SRD (Surinaamse Dollar)</option>
+          <option value="USD">USD (US Dollar)</option>
+          <option value="EUR">EUR (Euro)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- GRONDRECHT -->
+    <div class="mb-3">
+      <label class="form-label">Grondrecht</label>
+      <select class="form-select" name="grondrecht">
+        <option value="">Selecteer grondrecht (optioneel)</option>
+        <option value="eigendom">Eigendom</option>
+        <option value="erfpacht">Erfpacht</option>
+        <option value="grondhuur">Grondhuur</option>
+      </select>
+      <div class="form-text">
+        Type eigendomsrecht van het grond.
+      </div>
+    </div>
+
+    <!-- OPPERVLAKTES -->
+    <div class="row">
+      <!-- Perceel Oppervlakte -->
+      <div class="col-md-5 mb-3">
+        <label class="form-label">Perceel oppervlakte</label>
+        <input type="number" step="0.01" min="0" class="form-control" name="perceel_oppervlakte"
+          placeholder="Bijvoorbeeld: 500" />
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <label class="form-label">Eenheid</label>
+        <select class="form-select" name="perceel_eenheid">
+          <option value="">-</option>
+          <option value="m2" selected>m²</option>
+          <option value="hectare">Hectare</option>
+        </select>
+      </div>
+
+      <!-- Spacing -->
+      <div class="col-md-4 mb-3"></div>
+
+      <!-- Woon Oppervlakte -->
+      <div class="col-md-5 mb-3">
+        <label class="form-label">Woon oppervlakte</label>
+        <input type="number" step="0.01" min="0" class="form-control" name="woon_oppervlakte"
+          placeholder="Bijvoorbeeld: 120" />
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <label class="form-label">Eenheid</label>
+        <select class="form-select" name="woon_eenheid">
+          <option value="">-</option>
+          <option value="m2" selected>m²</option>
+          <option value="hectare">Hectare</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DISTRICT + WIJK -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">District</label>
+        <select name="district" id="districtSelect" class="form-select" required>
+          <option value="">Selecteer district</option>
+          {% for d in
+          ["paramaribo","wanica","nickerie","commewijne","para","saramacca","brokopondo","marowijne","coronie","sipaliwini"]
+          %}
+          <option value="{{ d }}">{{ d.capitalize() }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Wijk / gebied (optioneel)</label>
+        <select name="wijk" id="wijkSelect" class="form-select" disabled>
+          <option value="">Selecteer eerst een district</option>
+        </select>
+        <div class="form-text">
+          Kies eerst een district, daarna (optioneel) een wijk of gebied.
+        </div>
+      </div>
+    </div>
+
+    <!-- BESCHRIJVING -->
+    <div class="mb-3">
+      <label class="form-label">Beschrijving</label>
+      <textarea class="form-control" name="beschrijving" rows="4"></textarea>
+    </div>
+
+    <!-- FOTO'S -->
+    <div class="mb-3">
+      <label class="form-label">Foto's</label>
+
+      <!-- Multiple file upload - Flask will receive as getlist('fotos') -->
+      <input type="file" class="form-control" name="fotos" id="photoInput" multiple accept="image/*" />
+
+      <div class="form-text">
+        Je kunt meerdere foto's tegelijk uploaden (jpg, png, webp). Maximaal 10 foto's.
+      </div>
+
+      <!-- PREVIEW -->
+      <div id="photoPreview" class="d-flex flex-wrap gap-2 mt-2"></div>
+    </div>
+
+    <!-- ACTIES -->
+    <div class="form-actions d-flex gap-2">
+      <button type="submit" class="btn btn-success">Opslaan</button>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+        Annuleren
+      </a>
+    </div>
+
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/location.js') }}"></script>
+<script src="{{ url_for('static', filename='js/photo_preview.js') }}"></script>
+{% endblock %}

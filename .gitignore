@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Flask
+instance/
+.webassets-cache
+
+# Database (niet uploaden naar GitHub)
+*.db
+*.sqlite
+*.sqlite3
+realestate.db
+
+# Migrations (soms wel, soms niet - afhankelijk van voorkeur)
+# migrations/
+
+# Uploads (lokale foto's niet uploaden)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment variabelen
+.env
+.env.local
+.flaskenv
+
+# Logs
+*.log
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
